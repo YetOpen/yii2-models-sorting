@@ -50,6 +50,7 @@ class ARSortBehavior extends Behavior
             ActiveRecord::EVENT_BEFORE_INSERT => 'attachRule',
             ActiveRecord::EVENT_AFTER_INSERT  => 'resortModels',
             ActiveRecord::EVENT_AFTER_UPDATE  => 'resortModels',
+            ActiveRecord::EVENT_AFTER_DELETE  => 'resortModels',
         ];
     }
 
