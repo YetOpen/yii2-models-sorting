@@ -40,6 +40,11 @@ class ARSortBehavior extends Behavior
      * @var bool
      */
     public $sortRule = true;
+    
+    /**
+     * @var mixed
+     */
+    private $oldValue;
 
     /**
      * @inheritdoc
@@ -68,6 +73,9 @@ class ARSortBehavior extends Behavior
     public function changeSortAttribute($event): void
     {
         $owner = $this->owner;
+        
+        // Save old sort value
+        $this->oldValue = $owner->getOldAttribute($this->attribute);
 
         // If the attribute has changed to the higher side
         if (!$owner->isNewRecord && isset($owner->dirtyAttributes[$this->attribute])) {
@@ -111,7 +119,7 @@ class ARSortBehavior extends Behavior
         $owner = $this->owner;
 
         // Detection change sorting
-        if (array_key_exists($this->attribute, $event->changedAttributes ?? []) || $owner->isNewRecord) {
+        if ($owner->getAttribute($this->attribute) != $this->oldValue || $owner->isNewRecord) {
             $tableName  = $owner::getTableSchema()->fullName;
             $primaryKey = $owner::primaryKey()[0];
             $queryModel = $owner::find();
