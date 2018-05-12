@@ -52,7 +52,7 @@ class ARSortAction extends Action
         $modelClassName = $data['modelClass'];
         $primaryKey     = $data['primaryKey'];
         /** @var ARSortBehavior $model */
-        $model          = $modelClassName::find()
+        $model = $modelClassName::find()
             ->where([$primaryKey => Yii::$app->request->post('currentID')])
             ->one();
 
@@ -76,8 +76,12 @@ class ARSortAction extends Action
                 $targetModel = $targetModelQuery->one();
 
                 if ($targetModel instanceof ActiveRecord) {
-                    $newSortValue = $beforeModelID == $targetModel->$primaryKey ?
-                        $targetModel->getAttribute($data['attribute']) + 1 : $targetModel->getAttribute($data['attribute']);
+                    $newSortValue = $targetModel->getAttribute($data['attribute']);
+
+                    // If the attribute has changed to the lower side
+                    if ($beforeModelID == $targetModel->$primaryKey && $model->getAttribute($data['attribute']) > $newSortValue) {
+                        $newSortValue += 1;
+                    }
 
                     $model->setAttribute($data['attribute'], $newSortValue);
                     $result = $model->save();
