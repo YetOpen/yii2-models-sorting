@@ -42,16 +42,39 @@ class ARSortBehavior extends Behavior
     public $sortRule = true;
 
     /**
-     * @return array
+     * @inheritdoc
      */
-    public function events(): array
+    public function attach($owner)
     {
-        return [
-            ActiveRecord::EVENT_BEFORE_INSERT => 'attachRule',
-            ActiveRecord::EVENT_AFTER_INSERT  => 'resortModels',
-            ActiveRecord::EVENT_AFTER_UPDATE  => 'resortModels',
-            ActiveRecord::EVENT_AFTER_DELETE  => 'resortModels',
-        ];
+        parent::attach($owner);
+
+        $owner->on(ActiveRecord::EVENT_BEFORE_UPDATE, [$this, 'changeSortAttribute']);
+        $owner->on(ActiveRecord::EVENT_BEFORE_INSERT, [$this, 'changeSortAttribute']);
+
+        $owner->on(ActiveRecord::EVENT_BEFORE_INSERT, [$this, 'attachRule']);
+
+        $owner->on(ActiveRecord::EVENT_AFTER_INSERT, [$this, 'resortModels']);
+        $owner->on(ActiveRecord::EVENT_AFTER_UPDATE, [$this, 'resortModels']);
+        $owner->on(ActiveRecord::EVENT_AFTER_DELETE, [$this, 'resortModels']);
+    }
+
+    /**
+     * Fix change sort attribute value
+     *
+     * @param ModelEvent $event
+     *
+     * @return void
+     */
+    public function changeSortAttribute($event): void
+    {
+        $owner = $this->owner;
+
+        // If the attribute has changed to the higher side
+        if (!$owner->isNewRecord && isset($owner->dirtyAttributes[$this->attribute])) {
+            if ($owner->{$this->attribute} > $owner->getOldAttribute($this->attribute)) {
+                $owner->setAttribute($this->attribute, $owner->{$this->attribute} + 1);
+            }
+        }
     }
 
     /**
@@ -63,19 +86,16 @@ class ARSortBehavior extends Behavior
      */
     public function attachRule($event): void
     {
-        if ($this->sortRule) {
-            /** @var ActiveRecord $model */
-            $model = $event->sender;
+        $owner = $this->owner;
 
-            if (empty($model->{$this->attribute})) {
-                $query = $model::find();
+        if ($this->sortRule && empty($owner->{$this->attribute})) {
+            $query = $owner::find();
 
-                if ($this->queryCondition instanceof \Closure) {
-                    \call_user_func($this->queryCondition, $query, $model);
-                }
-
-                $model->{$this->attribute} = ($query->max($this->attribute) ? : 0) + 1;
+            if ($this->queryCondition instanceof \Closure) {
+                \call_user_func($this->queryCondition, $query, $owner);
             }
+
+            $owner->{$this->attribute} = ($query->max($this->attribute) ? : 0) + 1;
         }
     }
 
