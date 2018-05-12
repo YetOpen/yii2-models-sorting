@@ -111,7 +111,7 @@ class ARSortBehavior extends Behavior
         $owner = $this->owner;
 
         // Detection change sorting
-        if (isset($event->changedAttributes[$this->attribute]) || $owner->isNewRecord) {
+        if (array_key_exists($this->attribute, $event->changedAttributes ?? []) || $owner->isNewRecord) {
             $tableName  = $owner::getTableSchema()->fullName;
             $primaryKey = $owner::primaryKey()[0];
             $queryModel = $owner::find();
