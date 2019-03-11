@@ -1,5 +1,5 @@
 {
-  "name": "matthew-p/yii2-models-sorting",
+  "name": "yetopen/yii2-models-sorting",
   "description": "Sorting active record models (grid, form, code)",
   "type": "yii2-extension",
   "keywords": ["yii2","extension","models","sorting","model","grid","gridview","form","ar","active","record"],
@@ -11,7 +11,7 @@
     }
   ],
   "require": {
-    "php": ">=7.0",
+    "php": ">=5.6",
     "yiisoft/yii2": "*",
     "yiisoft/yii2-jui": "*"
   },

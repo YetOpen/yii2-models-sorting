@@ -118,7 +118,7 @@ class ARSortColumn extends DataColumn
      *
      * @return void
      */
-    protected function registerAssets(array $localModuleOptions = []): void
+    protected function registerAssets(array $localModuleOptions = [])
     {
         ARSortAsset::register($this->grid->view);
 
@@ -132,7 +132,7 @@ class ARSortColumn extends DataColumn
      *
      * @return string
      */
-    private function getUniqueId(): string
+    private function getUniqueId()
     {
         return 'mp-grid-' . \rand(10000, 99999);
     }

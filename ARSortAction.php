@@ -28,7 +28,7 @@ class ARSortAction extends Action
      *
      * @return array
      */
-    public function run(): array
+    public function run()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 

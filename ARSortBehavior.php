@@ -70,7 +70,7 @@ class ARSortBehavior extends Behavior
      *
      * @return void
      */
-    public function changeSortAttribute($event): void
+    public function changeSortAttribute($event)
     {
         $owner = $this->owner;
         
@@ -92,7 +92,7 @@ class ARSortBehavior extends Behavior
      *
      * @return void
      */
-    public function attachRule($event): void
+    public function attachRule($event)
     {
         $owner = $this->owner;
 
@@ -114,7 +114,7 @@ class ARSortBehavior extends Behavior
      *
      * @return bool
      */
-    public function resortModels($event): bool
+    public function resortModels($event)
     {
         $owner = $this->owner;
 
