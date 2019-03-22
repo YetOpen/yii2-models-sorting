@@ -98,6 +98,13 @@ Define encryption key in params.php:
 'MPARSort' => [
     'encryptionKey' => 'RandomKey',
 ],
+
+or 
+
+'MPComponents' => [
+    'encryptionKey' => 'RandomKey',
+],
+
 ```
 
 That's all. Check it.

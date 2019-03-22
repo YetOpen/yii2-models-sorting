@@ -62,7 +62,9 @@ class ARSortColumn extends DataColumn
     {
         parent::init();
 
-        if (!empty(Yii::$app->params['MPARSort']['encryptionKey'])) {
+        if (!empty(Yii::$app->params['MPComponents']['encryptionKey'])) {
+            $this->encryptionKey = Yii::$app->params['MPComponents']['encryptionKey'];
+        } else if (!empty(Yii::$app->params['MPARSort']['encryptionKey'])) {
             $this->encryptionKey = Yii::$app->params['MPARSort']['encryptionKey'];
         } else {
             throw new InvalidConfigException('Required `encryptionKey` param isn\'t set.');

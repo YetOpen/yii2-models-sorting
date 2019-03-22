@@ -36,7 +36,9 @@ class ARSortAction extends Action
         $result        = false;
         $newPositions  = [];
 
-        if (!empty(Yii::$app->params['MPARSort']['encryptionKey'])) {
+        if (!empty(Yii::$app->params['MPComponents']['encryptionKey'])) {
+            $encryptionKey = Yii::$app->params['MPComponents']['encryptionKey'];
+        } else if (!empty(Yii::$app->params['MPARSort']['encryptionKey'])) {
             $encryptionKey = Yii::$app->params['MPARSort']['encryptionKey'];
         } else {
             throw new InvalidConfigException('Required `encryptionKey` param isn\'t set.');
